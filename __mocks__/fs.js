@@ -1,23 +1,37 @@
-const fs = jest.createMockFromModule('fs');
-const _fs = jest.requireActual('fs')
+const fs = jest.createMockFromModule("fs");
+const _fs = jest.requireActual("fs");
 
-Object.assign(fs, _fs)
+Object.assign(fs, _fs);
 
-const mocks = {}
+const readMocks = {};
 
-fs.setMock = (path, error, data) => {
-  mocks[path] = [error, data]
-}
+fs.setReadMock = (path, error, data) => {
+  readMocks[path] = [error, data];
+};
 
 fs.readFile = (path, options, callback) => {
-  if(callback === undefined){
-    callback = options
+  if (callback === undefined) {
+    callback = options;
   }
-  if(path in mocks){
-    callback(...mocks[path])
-  }else{
-    _fs.readFile(path, options, callback)
+  if (path in readMocks) {
+    callback(...readMocks[path]);
+  } else {
+    _fs.readFile(path, options, callback);
   }
-}
+};
 
-module.exports = fs
+const writeMocks = {};
+
+fs.setWriteMock = (path, fn) => {
+  writeMocks[path] = fn;
+};
+
+fs.writeFile = (path, data, options, callback) => {
+  if(path in writeMocks){
+    writeMocks[path](path, data, options, callback)
+  }else{
+    _fs.writeFile(path, data, options, callback)
+  }
+};
+
+module.exports = fs;
