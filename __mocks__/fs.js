@@ -3,7 +3,7 @@ const _fs = jest.requireActual("fs");
 
 Object.assign(fs, _fs);
 
-const readMocks = {};
+let readMocks = {};
 
 fs.setReadMock = (path, error, data) => {
   readMocks[path] = [error, data];
@@ -20,7 +20,7 @@ fs.readFile = (path, options, callback) => {
   }
 };
 
-const writeMocks = {};
+let writeMocks = {};
 
 fs.setWriteMock = (path, fn) => {
   writeMocks[path] = fn;
@@ -33,5 +33,11 @@ fs.writeFile = (path, data, options, callback) => {
     _fs.writeFile(path, data, options, callback)
   }
 };
+
+// 清除 mocks, 防止测试互相干扰
+fs.clearMocks = () => {
+  readMocks = {}
+  writeMocks = {}
+}
 
 module.exports = fs;
