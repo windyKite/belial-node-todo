@@ -11,9 +11,16 @@
   "repository": "git@github.com:windyKite/belial-node-todo.git",
   "author": "萧泳森 <603540681@qq.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "commander": "^6.0.0",
     "inquirer": "^7.3.3",
     "node-todo-2": "^0.0.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "jest": "^26.4.2"
   }
 }
